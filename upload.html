@@ -22,9 +22,9 @@
 
             <span class="title">Network Visualizer</span>
 
-            <form method="post" action="network.php">
-                <input type="hidden" name="action" value="login">
-                
+            <form method="post" action="network.php" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="upload">
+
                 <div id="errors" class="alert alert-danger" role="alert">
                 </div>
 
@@ -33,12 +33,12 @@
 
                 <div class="custom-file">
                     <label class="custom-file-label" for="edgeFile">Edge file</label>
-                    <input type="file" class="custom-file-input" id="edgeFile" aria-describedby="inputGroupFileAddon01" required>
+                    <input type="file" class="custom-file-input" name="edgeFile" id="edgeFile" required>
                 </div>
                 <br/>
                 <div class="custom-file">
                     <label class="custom-file-label" for="nodeFile">Node file (optional)</label>
-                    <input type="file" class="custom-file-input" id="nodeFile" aria-describedby="inputGroupFileAddon01">
+                    <input type="file" class="custom-file-input" name="nodeFile" id="nodeFile">
                 </div>
 
                 <label for="inputUsername" class="sr-only">Username</label>
@@ -49,7 +49,7 @@
                     <input type="checkbox" name="hasHeaderColumn" value="true"> Has Header Column
                     </label>
                 </div>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Upload</button>
+                <button class="btn btn-lg btn-primary btn-block" name="submit" type="submit">Upload</button>
             </form>
         </div>
 

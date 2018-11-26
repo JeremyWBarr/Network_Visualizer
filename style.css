@@ -4,7 +4,7 @@ body {
     height: 100%;
 }
 
-body {
+body#signup-page {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-align: center;
@@ -34,13 +34,6 @@ body {
     text-align: left;
 }
 
-#login-page form, #signup-page form {
-    margin-bottom: 2em;
-}
-
-#login-page .checkbox, #signup-page .checkbox {
-    font-weight: 400;
-}
 .form-control {
     position: relative;
     box-sizing: border-box;
@@ -73,26 +66,37 @@ input.bottom {
     display: none;
 }
 
-.logout {
-    margin-top: 4em;
+/* sidebar */
+#settings-wrapper {
+    z-index: 1;
+    position: absolute;
+    width: 0;
+    height: 100%;
+    overflow-y: hidden;
+    background: #222;
+    opacity: 0.9;
 }
 
-#todo-page td {
-    padding-top: 1em;
+.sidebar-nav {
+    padding: 0;
+    list-style: none;
 }
 
-#todo-page .done {
-    font-style: italic;
-    text-decoration: line-through;
+/* main content */
+#graph-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
 }
 
-.done .reset, .undone .mark-done {
-    display: block;
+#wrapper.settingsDisplayed #settings-wrapper {
+    width: 250px;
 }
 
-.undone .reset, .done .mark-done {
-    display: none;
+#wrapper.settingsDisplayed #graph-wrapper {
+    padding-left: 250px;
 }
 
-
-
+#settings-toggle {
+    z-index: 1;
+}
