@@ -132,3 +132,10 @@ $.ajax({
 function updateStyle(elem, property, value) {
 	cy.$(elem).style({ [property]: value });
 }
+
+function exportGraph() {
+	var download = document.createElement('a');
+	download.href = cy.png();
+	download.download = 'export.png';
+	download.click();
+}

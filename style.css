@@ -84,7 +84,15 @@ input.bottom {
     overflow-y: hidden;
     background: #343a40;
     opacity: 0.9;
+    padding-top: 50px;
 }
+
+#settings {
+    color: white;
+    text-align: center;
+}
+
+
 
 .sidebar-nav {
     padding: 0;
@@ -101,11 +109,6 @@ input.bottom {
     background: #343a40;
     opacity: 0.9;
     right: 0;
-}
-
-.data-nav {
-    padding: 0;
-    list-style: none;
 }
 
 /* main content */

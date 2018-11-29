@@ -39,7 +39,14 @@
 
 	    	<!-- Settings -->
 	    	<div id="settings-wrapper">
-	    		<input type="color" id="nodeColor" name="nodeColor">
+	    		<div id="settings">
+	    			Node Color: <input type="color" id="nodeColor" name="nodeColor"><br/>
+	    			Edge Color: <input type="color" id="edgeColor" name="edgeColor"><br/>
+	    			Node Width: <input type="range" id="nodeWidth" name="nodeWidth" min="10" max="100"><br/>
+	    			Show Labels: <input type="checkbox" id="showLables" name="showLabels"><br/>
+	    			<a href="#" class="btn btn-outline-success" id="export">Export Graph</a>
+	    			<a href="index.html" class="btn btn-outline-danger" id="export">Upload New Data</a>
+		    	</div>
 	    	</div>
 
 	    	<!-- Page Content -->
@@ -78,11 +85,36 @@
 	    			$("#wrapper").toggleClass("dataDisplayed");
 	    		});
 
+	    		$("#export").click( function(e) {
+	    			e.preventDefault();
+	    			exportGraph();
+	    		});
+
 	    		$("#nodeColor").change( function(e) {
 	    			e.preventDefault();
-	    			console.log($(this).val());
 	    			updateStyle('node','background-color', $(this).val());
 	    		});
+
+	    		$("#edgeColor").change( function(e) {
+	    			e.preventDefault();
+	    			updateStyle('edge','line-color', $(this).val());
+	    		});
+
+	    		$("#nodeWidth").change( function(e) {
+	    			e.preventDefault();
+	    			updateStyle('node','width', $(this).val());
+	    			updateStyle('node','height', $(this).val());
+	    		});
+
+	    		$("#showLabels").change( function(e) {
+	    			e.preventDefault();
+	    			if($(this).val()) {
+	    				updateStyle('node','text-opacity', '1');
+	    			} else {
+	    				updateStyle('node','text-opacity', '0');
+	    			}
+	    		});
+
 
 	    	</script>
 	    </div>
