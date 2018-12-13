@@ -84,36 +84,38 @@ $.ajax({
         data = JSON.parse(response).data;
 
         for(var i = 0 in data) {
-        	var ver1 = data[i][1];
-        	var ver2 = data[i][2];
-        	// Add first node if doesn't exist
-        	if(cy.elements('node[name = "'+ver1+'"]').length < 1) {
-        		cy.add({
-        			group: "nodes",
-        			data: {
-	        			id: ver1,
-	        			name: ver1
-	        		}
-        		});
-        	}
-        	// Add second node if doesn't exist
-        	if(cy.elements('node[name = "'+ver2+'"]').length < 1) {
-        		cy.add({
-        			group: "nodes",
-        			data: {
-	        			id:   ver2,
-	        			name: ver2
-	        		}
-        		});
-        	}
-        	// Add edge
-        	cy.add({
-        		group: "edges",
-        		data: {
-        			source: ver1,
-        			target: ver2
-        		}
-        	});
+            if(i != 1) {
+            	var ver1 = data[i][1];
+            	var ver2 = data[i][2];
+            	// Add first node if doesn't exist
+            	if(cy.elements('node[name = "'+ver1+'"]').length < 1) {
+            		cy.add({
+            			group: "nodes",
+            			data: {
+    	        			id: ver1,
+    	        			name: ver1
+    	        		}
+            		});
+            	}
+            	// Add second node if doesn't exist
+            	if(cy.elements('node[name = "'+ver2+'"]').length < 1) {
+            		cy.add({
+            			group: "nodes",
+            			data: {
+    	        			id:   ver2,
+    	        			name: ver2
+    	        		}
+            		});
+            	}
+            	// Add edge
+            	cy.add({
+            		group: "edges",
+            		data: {
+            			source: ver1,
+            			target: ver2
+            		}
+            	});
+            }
         }
         var layout = cy.layout(options);
         layout.run();
@@ -125,6 +127,7 @@ $.ajax({
 
 function updateStyle(elem, property, value) {
 	cy.$(elem).style({ [property]: value });
+
 }
 
 function setLayout(layout) {

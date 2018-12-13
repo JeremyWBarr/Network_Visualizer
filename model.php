@@ -28,6 +28,7 @@ function connectToDB(){
 
 function setupDB() {
 	global $dbh;
+	$dbh->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 
 	try {
 
@@ -47,11 +48,12 @@ function setupDB() {
         // TODO: add required settings
         $dbh->exec(
 			"create table if not exists userSettings(".
-			"uid integer,".
+			"id integer primary key autoincrement,".
+			"uid text,".
 			"name text,".
 			"nodeColor text,".
 			"edgeColor text,".
-			"nodeSize integer,".
+			"nodeSize text,".
 			"graphType text)"
 		);
 
@@ -121,7 +123,7 @@ function getUserInfo($username) {
 	}
 }
 
-function addUserSettings($username, $name, $nodeColor, $edgeColor, $nodeSize, $graphType) {
+function addUserSettings($username, $name, $nodeColor, $edgeColor, $nodeSize) {
 	global $dbh;
     connectToDB();
 
@@ -139,28 +141,56 @@ function addUserSettings($username, $name, $nodeColor, $edgeColor, $nodeSize, $g
             die("There was an error reading from the database: ". 
                 $dbh->errorInfo()[2]);
         } else {
-            $uid = $statement->fetch(PDO::FETCH_ASSOC);
+            $uid = $statement->fetch(PDO::FETCH_ASSOC)["id"];
         }
 
-        $statement = $dbh->prepare("insert into userSettings(uid, name, nodeColor, edgeColor, nodeSize, graphType) ".
-            "values(:uid, :name, :nodeColor, :edgeColor, :nodeSize, :graphType)");
+        $statement = $dbh->prepare("insert into userSettings(uid, name, nodeColor, edgeColor, nodeSize) ".
+            "values(:uid, :name, :nodeColor, :edgeColor, :nodeSize)");
 
         $success = $statement->execute(array(
             ":uid" 			=> $uid,
             ":name" 		=> $name,
             ":nodeColor" 	=> $nodeColor,
             ":edgeColor" 	=> $edgeColor,
-            ":nodeSize" 	=> $nodeSize,
-            ":graphType" 	=> $graphType
+            ":nodeSize" 	=> $nodeSize
         ));
            
         if(!$success){
             die("There was an error saving to the database: ". 
                 $dbh->errorInfo()[2]);
         }
+
+
     } catch(PDOException $e){
         die("There was an error saving to the database: ". $e->getMessage());
     }
+}
+
+function getLayout($layoutId) {
+	global $dbh;
+	connectToDB();
+
+	try {
+		// Get data for id
+		$statement = $dbh->prepare(
+			"select * from userSettings where id = :id"
+		);
+
+		$success = $statement->execute(array(
+			":id" => $layoutId
+		));
+
+
+		if(!$success){
+            die("There was an error reading from the database: ". 
+                $dbh->errorInfo()[2]);
+        } else {
+            return $statement->fetch(PDO::FETCH_ASSOC);
+        }
+
+	} catch(PDOException $e) {
+		die("There was an error reading from the database: ". $e->getMessage());
+	}
 }
 
 function getUserSettings($username) {
@@ -181,17 +211,18 @@ function getUserSettings($username) {
             die("There was an error reading from the database: ". 
                 $dbh->errorInfo()[2]);
         } else {
-            $uid = $statement->fetch(PDO::FETCH_ASSOC);
+            $uid = $statement->fetch(PDO::FETCH_ASSOC)["id"];
         }
 
 		// Get data for id
-		$dbh->prepare(
+		$statement = $dbh->prepare(
 			"select * from userSettings where uid = :uid"
 		);
 
 		$success = $statement->execute(array(
 			":uid" => $uid
 		));
+
 
 		if(!$success){
             die("There was an error reading from the database: ". 

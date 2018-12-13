@@ -10,11 +10,14 @@ require_once 'reader.php';
 require_once 'model.php';
 
 $ACTION_MAP = array(
-    "upload"        => "upload",
-    "getData"		=> "getData",
-    "getSettings"   => "getSettings",
-    "login"         => "login",
-    "signup"        => "signup"
+    "upload"            => "upload",
+    "getData"		    => "getData",
+    "getSettings"       => "getSettings",
+    "login"             => "login",
+    "signup"            => "signup",
+    "saveLayout"        => "saveLayout",
+    "getLayouts"        => "getLayouts",
+    "getLayoutSettings" => "getLayoutSettings"
 );
 
 if(array_key_exists("action", $_POST) && 
@@ -24,15 +27,20 @@ if(array_key_exists("action", $_POST) &&
 
 function upload($data) {	
 
-	require_once 'network-content.php';
 
     $excel = new Spreadsheet_Excel_Reader();
     $excel->read($_FILES['edgeFile']['tmp_name']);    
 
     $_SESSION["data"] = $excel->sheets[0]['cells'];
-    $_SESSION["user"] = $data["username"];
 
-    login($data["username"], $data["password"]);
+    if($data["username"] != '') {
+        $_SESSION["user"] = $data["username"];
+        login($data["username"], $data["password"]);
+    } else {
+        $_SESSION["user"] = "anonymous";
+    }
+
+	require_once 'network-content.php';
 }
 
 function signup($data) {
@@ -44,7 +52,7 @@ function signup($data) {
 
     addNewUser($data["username"],  password_hash($data["password"], PASSWORD_BCRYPT));
 
-    redirectToLogin("", "Account created! Now log in.");
+    redirectToLogin("", "Account created!");
 }
 
 function login($username, $password) {
@@ -53,6 +61,26 @@ function login($username, $password) {
     if(!password_verify($password, $user["password"])){
         redirectToLogin("Invalid username or password.");
     }
+}
+
+function saveLayout($data) {
+    $layout = json_decode($data["layout"]);
+
+    addUserSettings(
+        $_SESSION["user"],
+        $layout->namekey,
+        $layout->nodeColor,
+        $layout->edgeColor,
+        $layout->nodeSize
+    );
+}
+
+function getLayouts() {
+    print(json_encode(getUserSettings($_SESSION["user"])));
+}
+
+function getLayoutSettings($data) {
+    print(json_encode(getLayout($data["layoutId"])));
 }
 
 function getSettings() {
@@ -76,6 +104,20 @@ function redirectToLogin($error="", $message="") {
     <html>
     <head>
         <meta http-equiv="refresh" content="0; url=index.html?error='. 
+        rawurlencode($error) .'&message='. rawurlencode($message) .'" />
+    </head>
+    </html>
+    <html>
+    ';
+    exit();
+}
+
+function redirectToSignup($error="", $message="") {
+    echo '
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="refresh" content="0; url=signup.html?error='. 
         rawurlencode($error) .'&message='. rawurlencode($message) .'" />
     </head>
     </html>
