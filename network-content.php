@@ -14,6 +14,7 @@
 		<link rel="stylesheet" href="style.css">
 
 		<script src="node_modules/cytoscape/dist/cytoscape.js"></script>
+		<script src="https://unpkg.com/cytoscape-cola@2.2.3/cytoscape-cola.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
     </head>
 
@@ -37,17 +38,54 @@
 
 	    <div id="wrapper">
 
-	    	<!-- Settings -->
+
 	    	<div id="settings-wrapper">
-	    		<div id="settings">
-	    			Node Color: <input type="color" id="nodeColor" name="nodeColor"><br/>
-	    			Edge Color: <input type="color" id="edgeColor" name="edgeColor"><br/>
-	    			Node Width: <input type="range" id="nodeWidth" name="nodeWidth" min="10" max="100"><br/>
-	    			Show Labels: <input type="checkbox" id="showLables" name="showLabels"><br/>
-	    			<a href="#" class="btn btn-outline-success" id="export">Export Graph</a>
-	    			<a href="index.html" class="btn btn-outline-danger" id="export">Upload New Data</a>
+	    		<div class="input-group mb-3" id="settings">
+			    	<div class="row">
+			    		<div class="col">Node Color:</div>
+					    <div class="col"><input type="color" id="nodeColor" name="nodeColor"></div>
+					    <div class="w-100"></div>
+
+					    <div class="col">Edge Color:</div>
+					    <div class="col"><input type="color" id="edgeColor" name="edgeColor"></div>
+					    <div class="w-100"></div>
+
+					    <div class="col">Node Size:</div>
+					    <div class="col"><input type="range" id="nodeSize" name="nodeSize" min="20" max="150" step="1" value="50"></div>
+					    <div class="w-100"></div>
+
+					    <div class="col">Show Labels:</div>
+					    <div class="col">
+					    	<select class="settings-select" id="showLabels" name="showLabels" data-style="btn-outline-light">
+								<option value="yes">Yes</option>
+								<option value="no">No</option>
+				    		</select>
+					    </div>
+					    <div class="w-100"></div>
+
+					    <div class="col">Layout Algorithm:</div>
+					    <div class="col">
+					    	<select class="settings-select" id="graphLayout" name="graphLayout">
+								<option value="random">Random</option>
+								<option value="grid">Grid</option>
+								<option value="circle">Circle</option>
+								<option value="cose">Cose</option>
+								<option value="cola">Cola</option>
+							</select>
+					    </div>
+					    <div class="w-100"></div>
+
+			    	</div>
 		    	</div>
-	    	</div>
+			    <div class="row" id="settings-bottom">
+				    <div class="col">
+				    	<a href="#" class="btn btn-outline-success" id="export">Export Graph</a>
+				    </div>
+				    <div class="col">
+						<a href="index.html" class="btn btn-outline-danger" id="export">Restart</a>
+				    </div>
+				</div>
+		    </div>
 
 	    	<!-- Page Content -->
 	    	<div id="graph-wrapper">
@@ -90,6 +128,11 @@
 	    			exportGraph();
 	    		});
 
+	    		$("#graphLayout").click( function(e) {
+	    			e.preventDefault();
+	    			setLayout($("#graphLayout").val());
+	    		});
+
 	    		$("#nodeColor").change( function(e) {
 	    			e.preventDefault();
 	    			updateStyle('node','background-color', $(this).val());
@@ -100,7 +143,7 @@
 	    			updateStyle('edge','line-color', $(this).val());
 	    		});
 
-	    		$("#nodeWidth").change( function(e) {
+	    		$("#nodeSize").change( function(e) {
 	    			e.preventDefault();
 	    			updateStyle('node','width', $(this).val());
 	    			updateStyle('node','height', $(this).val());
@@ -108,7 +151,7 @@
 
 	    		$("#showLabels").change( function(e) {
 	    			e.preventDefault();
-	    			if($(this).val()) {
+	    			if($(this).val() == "yes") {
 	    				updateStyle('node','text-opacity', '1');
 	    			} else {
 	    				updateStyle('node','text-opacity', '0');

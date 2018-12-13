@@ -14,8 +14,10 @@ body#signup-page {
     background-color: #f5f5f5;
 }
 
+
 body#networkbody {
     padding-top: 3rem;
+    background-color: #EEE;
 }
 
 .title {
@@ -84,18 +86,59 @@ input.bottom {
     overflow-y: hidden;
     background: #343a40;
     opacity: 0.9;
-    padding-top: 50px;
 }
 
 #settings {
     color: white;
+    border-color: #FFF;
+}
+
+#settings .col {
+    margin-bottom: 30px;
+}
+
+#settings-bottom {
+    bottom: 64px;
+    position: inherit;
+    margin: auto;
+}
+
+#settings-bottom a {
+    width: 120px;
+}
+
+#settings input[type="color"] {
+    border: 1px solid #000;
+    border-radius: .25rem;
+    opacity: 0.9;
+    height: calc(2.25rem + 2px);
+    width: 100%;
+}
+
+.settings-select {
+    display: inline-block;
+    width: 100%;
+    height: calc(2.25rem + 2px);
+    padding: .375rem 1.75rem .375rem .75rem;
+    line-height: 1.5;
+    color: #000;
+    background-color: #DDD;
+    vertical-align: middle;
+    opacity: 0.9;
+    font-weight: bold;
+    background-size: 8px 10px;
     text-align: center;
+    border: 1px solid #000;
+    border-radius: .25rem;
+    -webkit-appearance: none;
+}
+
+#wrapper.settingsDisplayed #settings-bottom {
+    position: fixed;
 }
 
 
-
 .sidebar-nav {
-    padding: 0;
     list-style: none;
 }
 
@@ -120,6 +163,7 @@ input.bottom {
 
 #wrapper.settingsDisplayed #settings-wrapper {
     width: 350px;
+    padding: 50px 20px 0 20px;
 }
 
 #wrapper.settingsDisplayed #graph-wrapper {
